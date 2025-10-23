@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>✨ ChatX – Extraordinary Real-Time Chat App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:700|Open+Sans:400&display=swap');
+
+    :root {
+      --main-gradient: linear-gradient(120deg, #5fd2ff 0%, #a684fa 100%);
+      --glass-bg: rgba(255, 255, 255, 0.18);
+      --primary-blue: #5fd2ff;
+      --secondary-green: #a7ffeb;
+      --mention-glow: #30f7d6;
+      --shadow: 0 6px 32px 0 rgba(35, 49, 97, 0.07);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Open Sans', sans-serif;
+      background: var(--main-gradient);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      padding: 18px 30px;
+      background: rgba(22, 26, 61, 0.25);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+    }
+
+    .logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-size: 2em;
+      background: linear-gradient(90deg, #5fd2ff, #a684fa 80%);
+      --webkit-background-clip: text;
+      --webkit-text-fill-color: transparent;
+    }
+
+    .online-users {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .online-users .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 5px 1px #a684fa;
+      background: var(--main-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(67, 81, 122, 0.26);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .overlay[style*="display: none"] {
+      pointer-events: none;
+    }
+
+    .login-card {
+      background: var(--glass-bg);
+      border-radius: 25px;
+      padding: 40px 32px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .login-card h2 {
+      margin-bottom: 16px;
+    }
+
+    .login-card input {
+      padding: 10px;
+      margin-bottom: 16px;
+      border-radius: 12px;
+      border: none;
+      width: 100%;
+    }
+
+    .login-card button {
+      padding: 10px 25px;
+      border-radius: 15px;
+      border: none;
+      background: var(--main-gradient);
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    main {
+      flex: 1 1 0%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow-y: auto;
+      padding-bottom: 75px;
+    }
+
+    .chat {
+      list-style: none;
+      padding: 0 0.6em;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4em;
+    }
+
+    .chat li {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .bubble {
+      max-width: 68vw;
+      padding: 14px 20px;
+      border-radius: 20px 20px 20px 8px;
+      background: var(--glass-bg);
+      color: #222;
+      box-shadow: var(--shadow);
+      font-size: 1.12em;
+      position: relative;
+      word-break: break-word;
+      backdrop-filter: blur(16px);
+    }
+
+    .bubble.mine {
+      align-self: flex-end;
+      background: rgba(95, 210, 255, 0.3);
+      color: #183241;
+      border-bottom-right-radius: 1em;
+    }
+
+    .bubble.mention {
+      border: 2px solid var(--mention-glow);
+      box-shadow: 0 0 12px 0 var(--mention-glow);
+    }
+
+    .bubble.private {
+      background: #a684fa1c;
+      color: #380466;
+    }
+
+    .avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: var(--main-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1em;
+      box-shadow: 0 0 8px 2px #a684fa;
+    }
+
+    footer {
+      position: sticky;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(6px);
+      padding: 14px 19px;
+      box-shadow: 0 -2px 22px 0 rgba(35, 49, 97, .18);
+      gap: 12px;
+    }
+
+    #messageInput {
+      flex: 1 1 0%;
+      padding: 13px 18px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.08em;
+      background: #ffffffcc;
+      margin-right: 8px;
+    }
+
+    .sendBtn {
+      padding: 12px 26px;
+      border-radius: 16px;
+      border: none;
+      font-weight: bold;
+      font-size: 1.1em;
+      background: var(--main-gradient);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .sendBtn:hover {
+      background: linear-gradient(90deg, #a684fa, #5fd2ff);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header Bar -->
+  <header>
+    <div class="logo">✨ ChatX</div>
+    <div class="online-users" id="userList"></div>
+  </header>
+  <!-- Main Chat Window -->
+  <main>
+    <ul class="chat" id="messages"></ul>
+  </main>
+  <!-- Login overlay -->
+  <div class="overlay" id="loginOverlay">
+    <div class="login-card glass">
+      <h2>Sign In</h2>
+      <input id="usernameInput" placeholder="Username" />
+      <button id="loginBtn">Join Chat</button>
+    </div>
+  </div>
+  <!-- Message input bar -->
+  <footer>
+    <input id="messageInput" autocomplete="off" placeholder="Type a message..." />
+    <button id="sendBtn" class="sendBtn">Send</button>
+  </footer>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    let myUsername = null;
+
+    document.getElementById('loginBtn').onclick = () => {
+      const username = document.getElementById('usernameInput').value;
+      if (username) {
+        myUsername = username;
+        socket.emit('join', username);
+        document.getElementById('loginOverlay').style.display = 'none';
+      }
+    };
+
+    document.getElementById('sendBtn').onclick = sendMessage;
+    document.getElementById('messageInput').onkeydown = function (e) {
+      if (e.key === 'Enter') sendMessage();
+    };
+
+    function sendMessage() {
+      const msg = document.getElementById('messageInput').value;
+      if (!msg) return;
+      const match = msg.match(/@(\w+)/);
+      const toUser = match ? match[1] : null;
+      socket.emit('chat message', { from: myUsername, to: toUser, msg: msg });
+      document.getElementById('messageInput').value = '';
+    }
+
+    function renderMessage({ from, msg, to, privateMsg = false }) {
+      const li = document.createElement('li');
+      const avatar = document.createElement('div');
+      avatar.className = 'avatar';
+      avatar.textContent = from ? from.charAt(0).toUpperCase() : '?';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      if (from === myUsername) bubble.classList.add('mine');
+      if (privateMsg) bubble.classList.add('private');
+      if (msg.includes(`@${myUsername}`)) bubble.classList.add('mention');
+      bubble.innerHTML = `<strong>${from}:</strong> ${highlightMention(msg)}`;
+
+      li.appendChild(avatar);
+      li.appendChild(bubble);
+      document.getElementById('messages').appendChild(li);
+      li.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function highlightMention(text) {
+      return text.replace(/@(\w+)/g, '<span style="color:#30f7d6;font-weight:700;">@$1</span>');
+    }
+
+    socket.on('chat message', data => renderMessage(data));
+    socket.on('private message', data => renderMessage({ ...data, privateMsg: true }));
+    socket.on('user-list', users => {
+      document.getElementById('userList').innerHTML = users
+        .map(username => `<span class="avatar">${username.charAt(0).toUpperCase()}</span>`)
+        .join('');
+    });
+  </script>
+</body>
+
+</html>
