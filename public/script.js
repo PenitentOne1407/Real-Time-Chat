@@ -18,3 +18,16 @@ socket.on('chat message', (msg) => {
   messages.appendChild(item);
   messages.scrollTop = messages.scrollHeight;
 });
+// Credits Modal Logic
+document.getElementById('creditsBtn').onclick = function () {
+  document.getElementById('creditsModal').style.display = 'flex';
+};
+document.getElementById('closeModal').onclick = function () {
+  document.getElementById('creditsModal').style.display = 'none';
+};
+window.onclick = function (event) {
+  const modal = document.getElementById('creditsModal');
+  if (event.target == modal) {
+    modal.style.display = 'none';
+  }
+};
