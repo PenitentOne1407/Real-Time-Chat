@@ -222,6 +222,8 @@
       background: linear-gradient(90deg, #a684fa, #5fd2ff);
     }
   </style>
+  <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -306,6 +308,39 @@
         .join('');
     });
   </script>
+  <!-- Credits Button and Modal -->
+  <button id="creditsBtn" class="credits-btn">Credits</button>
+  <div id="creditsModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>Credits</h3>
+      <ul>
+        Tamanna Chetry & Pradhyumn Maurya Shettigar😏
+      </ul>
+    </div>
+  </div>
+
+  <!-- Footer with Copyright -->
+  <footer class="footer">
+    &copy; 2025 ChatX. All rights reserved.
+  </footer>
+  <script>
+    // Credits Modal functionality
+    document.getElementById('creditsBtn').onclick = function () {
+      document.getElementById('creditsModal').style.display = 'flex';
+    };
+    document.getElementById('closeModal').onclick = function () {
+      document.getElementById('creditsModal').style.display = 'none';
+    };
+    window.onclick = function (event) {
+      const modal = document.getElementById('creditsModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    };
+  </script>
+
+
 </body>
 
 </html>
